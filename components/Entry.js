@@ -1,13 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { Icon } from 'react-native-elements'
 import PropTypes from "prop-types"
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const decodedMoods = ['test', 'sentiment-very-dissatisfied', 'sentiment-dissatisfied', 'sentiment-neutral', 'sentiment-satisfied', 'sentiment-very-satisfied']
 
 const Entry = (props) => {
+    const navigation = useNavigation();
+
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Details')}>
             <Icon
                 name={decodedMoods[props.mood]}
                 color='#0000008A'
@@ -18,7 +22,7 @@ const Entry = (props) => {
                 <Text style={[{fontSize: 15, fontWeight: "700"}, styles.text]}>{props.date}</Text>
                 <Text style={[{fontSize: 14}, styles.text]}>{props.status}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
