@@ -9,9 +9,8 @@ const decodedMoods = ['test', 'sentiment-very-dissatisfied', 'sentiment-dissatis
 
 const Entry = (props) => {
     const navigation = useNavigation();
-
     return (
-        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Details')}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Details', {...props})}>
             <Icon
                 name={decodedMoods[props.mood]}
                 color='#0000008A'
@@ -19,7 +18,7 @@ const Entry = (props) => {
                 style={{paddingLeft: 15}}
             />
             <View style={{paddingHorizontal: 15,}}>
-                <Text style={[{fontSize: 15, fontWeight: "700"}, styles.text]}>{props.date}</Text>
+                <Text style={[{fontSize: 15, fontWeight: "700"}, styles.text]}>{props.date.toDateString()}</Text>
                 <Text style={[{fontSize: 14}, styles.text]}>{props.status}</Text>
             </View>
         </TouchableOpacity>
@@ -44,13 +43,13 @@ const styles = StyleSheet.create({
 
 Entry.propTypes = {
     mood: PropTypes.number,
-    date: PropTypes.string,
+    date: PropTypes.instanceOf(Date),
     description: PropTypes.string,
 }
 
 Entry.defaultProps = {
     mood: 3,
-    date: 'Test Apr 1 2020',
+    date: new Date(),
     description: `Video Added`,
 }
 

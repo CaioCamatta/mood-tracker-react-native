@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component {
         entries: sample_entries,
     }
 
-    renderEntries = ({ item, navigation }) => <Entry {...item} date={item.date.toDateString()} navigation={this.props.navigation} />
+    renderEntries = ({ item, navigation }) => <Entry {...item} date={item.date} navigation={this.props.navigation} />
 
     render() {
         return (
