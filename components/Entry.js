@@ -5,7 +5,7 @@ import PropTypes from "prop-types"
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const decodedMoods = ['test', 'sentiment-very-dissatisfied', 'sentiment-dissatisfied', 'sentiment-neutral', 'sentiment-satisfied', 'sentiment-very-satisfied']
+const decodedMoods = ['sentiment-very-dissatisfied', 'sentiment-dissatisfied', 'sentiment-neutral', 'sentiment-satisfied', 'sentiment-very-satisfied', 'test']
 
 const Entry = (props) => {
     const navigation = useNavigation();
@@ -18,7 +18,7 @@ const Entry = (props) => {
                 style={{paddingLeft: 15}}
             />
             <View style={{paddingHorizontal: 15,}}>
-                <Text style={[{fontSize: 15, fontWeight: "700"}, styles.text]}>{props.date.toDateString()}</Text>
+                <Text style={[{fontSize: 15, fontWeight: "700"}, styles.text]}>{props.date}</Text>
                 <Text style={[{fontSize: 14}, styles.text]}>{props.status}</Text>
             </View>
         </TouchableOpacity>
@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
 
 Entry.propTypes = {
     mood: PropTypes.number,
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.string,
     description: PropTypes.string,
 }
 
 Entry.defaultProps = {
     mood: 3,
-    date: new Date(),
+    date: 'Wed Jul 22 2020',
     description: `Video Added`,
 }
 
