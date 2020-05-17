@@ -10,16 +10,24 @@ const decodedMoods = ['sentiment-very-dissatisfied', 'sentiment-dissatisfied', '
 const Entry = (props) => {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Details', {...props})}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Details',
+            { 
+                date: props.date, 
+                description: props.description, 
+                mood: props.mood, 
+                writtenJournal: props.writtenJournal, 
+                status: props.status 
+            }
+        )}>
             <Icon
                 name={decodedMoods[props.mood]}
                 color='#0000008A'
                 size={50}
-                style={{paddingLeft: 15}}
+                style={{ paddingLeft: 15 }}
             />
-            <View style={{paddingHorizontal: 15,}}>
-                <Text style={[{fontSize: 15, fontWeight: "700"}, styles.text]}>{props.date}</Text>
-                <Text style={[{fontSize: 14}, styles.text]}>{props.status}</Text>
+            <View style={{ paddingHorizontal: 15, }}>
+                <Text style={[{ fontSize: 15, fontWeight: "700" }, styles.text]}>{props.date}</Text>
+                <Text style={[{ fontSize: 14 }, styles.text]}>{props.status}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -36,7 +44,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginVertical: 10,
     },
-    text:{
+    text: {
         color: "#656565"
     }
 });

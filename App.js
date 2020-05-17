@@ -27,7 +27,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="LOG" component={HomeStackScreen} />
-        <Tab.Screen name="+" component={AddScreen} />
+        <Tab.Screen name="Adder" component={AddScreen} />
         <Tab.Screen name="STATS" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
