@@ -16,6 +16,7 @@ class DetailsScreen extends React.Component {
 
     retrieveData = async (date) => {
         try {
+            console.log(date)
             const values = await AsyncStorage.getItem(date)
             const obj = JSON.parse(values)
 
@@ -35,6 +36,11 @@ class DetailsScreen extends React.Component {
             this.retrieveData(this.props.route.params.date)
             console.log('Update')
         });
+    }
+
+    // Remove listeners
+    componentWillUnmount(){
+        this._updater()
     }
 
     render() {
@@ -58,7 +64,7 @@ class DetailsScreen extends React.Component {
                                 : <Text style={[styles.journalText]}>Edit to Add Journal</Text>}
 
                     </View>
-                    <Button title="Edit" type="clear" onPress={() => this.props.navigation.navigate('Adder', { ...entryObj, onBack: () => this.refresh() })}></Button>
+                    <Button title="Edit" type="clear" onPress={() => this.props.navigation.navigate('Adder', { ...entryObj})}></Button>
                 </View>
             );
         } else {

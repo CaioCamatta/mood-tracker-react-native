@@ -9,8 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 const decodedMoodPhrase = ['Depressed', 'Dissatisfied', 'Mediocre', 'Satisfied', 'Delighted', 'Mood']
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+// TODO make this update better with parameters
 class AddScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       mood: 5,
@@ -18,17 +19,48 @@ class AddScreen extends React.Component {
       mode: 'date',
       show: false,
       writtenJournal: '',
+      allowPopulating: true,
     }
   }
 
-  componentDidMount(){
-    // If pre-populating data is passed
-    if(this.props.route.params){
+  componentDidMount() {
+    // If tab is pressed, reset state
+    this._onPressListener = this.props.navigation.addListener('tabPress', () => {
+      console.log('Tab pressed')
       this.setState({
-        ...this.props.route.params,
-        date: new Date(this.props.route.params.date),
+        mood: 5,
+        date: new Date(),
+        mode: 'date',
+        show: false,
+        writtenJournal: '',
+        allowPopulating: false,
       })
-    }
+    });
+
+
+    this._updater = this.props.navigation.addListener('focus', () => {
+      console.log('allowPopulating', this.state.allowPopulating)// If pre-populating data is passed
+
+      if (this.props.route.params && this.state.allowPopulating) {
+        console.log('params:', this.props.route.params)
+        this.setState({
+          ...this.props.route.params,
+          date: new Date(this.props.route.params.date)
+        })
+      }
+    });
+
+    this._resetter = this.props.navigation.addListener('blur', () => {
+      console.log('leaving')// If pre-populating data is passed
+      this.setState({allowPopulating:true})
+    });
+  }
+
+  // Delete listeners
+  componentWillUnmount() {
+    console.log('unmount')
+    this._onPressListener();
+    this._updater();
   }
 
   handleTextChange = writtenJournal => {
@@ -53,7 +85,7 @@ class AddScreen extends React.Component {
     try {
 
       // Write object before storing
-      const entryObj = this.state.writtenJournal ? { mood: this.state.mood, status: 'Journal Added', writtenJournal: this.state.text} : { mood: this.state.mood, status: 'No Journal Added', writtenJournal: ''}
+      const entryObj = this.state.writtenJournal ? { mood: this.state.mood, status: 'Journal Added', writtenJournal: this.state.writtenJournal } : { mood: this.state.mood, status: 'No Journal Added', writtenJournal: '' }
 
       await AsyncStorage.setItem(
         this.state.date.toDateString(),
@@ -139,7 +171,7 @@ const styles = StyleSheet.create({
   emoji: {
     paddingTop: 45,
   },
-  input:{
+  input: {
     paddingHorizontal: 30,
     paddingVertical: 20,
     textAlign: 'justify',
