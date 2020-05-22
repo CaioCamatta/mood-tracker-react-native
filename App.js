@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen'
 import DetailsScreen from './screens/DetailsScreen'
 import AddScreen from './screens/AddScreen'
 import SettingsScreen from './screens/SettingsScreen'
+import StatsScreen from './screens/StatsScreen'
 
 const HomeStack = createStackNavigator();
 
@@ -28,7 +29,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="LOG" component={HomeStackScreen} />
         <Tab.Screen name="Adder" component={AddScreen} />
-        <Tab.Screen name="STATS" component={SettingsScreen} />
+        <Tab.Screen name="STATS" component={StatsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
