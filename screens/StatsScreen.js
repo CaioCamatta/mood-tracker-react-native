@@ -10,9 +10,9 @@ const decodedMoodEmoticons = [
   "sentiment-neutral",
   "sentiment-satisfied",
   "sentiment-very-satisfied",
-  "test",
+  "circle-outline",
 ];
-const entries = [];
+var entries = [];
 
 export default class StatsScreen extends React.Component {
   state = {
@@ -25,9 +25,16 @@ export default class StatsScreen extends React.Component {
     });
   }
 
-  databaseToEntry = (date, obj) => {
-    const jsObj = JSON.parse(obj);
-    entries.push({ date, ...jsObj });
+  pushUnique = (obj) => {
+    if (entries) {
+      entries.findIndex(
+        (x) => x.date.toDateString() === obj.date.toDateString()
+      ) === -1
+        ? entries.push(obj)
+        : null;
+    } else {
+      entries.push(obj);
+    }
   };
 
   retrieveData = async () => {
@@ -37,27 +44,47 @@ export default class StatsScreen extends React.Component {
       const values = await AsyncStorage.multiGet(keys);
 
       // Map each obj to an entry
-      values.map((arr) => this.databaseToEntry(...arr));
-      console.log("   success:", values);
+      values.map((arr) =>
+        this.pushUnique({ date: new Date(arr[0]), ...JSON.parse(arr[1]) })
+      );
+      console.log("   Success:", entries);
 
       // Display real list only if it has 1 object
-      values.length > 0 ? this.setState({ entries }) : null;
+      if (entries.length > 0) {
+        entries.sort((a, b) => b.date - a.date);
+        console.log(entries);
+
+        // Fill entries
+        this.addEmptyEntries(entries[entries.length - 1].date, entries[0].date);
+      }
     } catch (error) {
-      console.log("   fail:", error);
+      console.log("   Fail:", error);
     }
   };
 
-  renderIcons = ({ item }) => {
-    const date = new Date(item.date);
+  addEmptyEntries = (startDate, endDate) => {
+    var start = new Date(startDate);
+    const end = new Date(endDate);
+    while (start <= end) {
+      entryObj = { mood: 5, date: new Date(start) };
+      this.pushUnique(entryObj);
+      start.setDate(start.getDate() + 1);
+    }
+    entries.sort((a, b) => b.date - a.date);
+    this.setState({ entries: entries });
+  };
+
+  renderIcon = ({ item }) => {
     return (
-      <View style={{ paddingTop: 20, flex: .166666 }}>
+      <View style={{ paddingTop: 20, flex: 0.166666 }}>
         <Icon
           name={decodedMoodEmoticons[item.mood]}
           color="#0000008A"
           size={40}
+          type={item.mood < 5 ? "ionicons" : "material-community"}
         />
-        <Text>
-          {date.getDate()}/{date.getDay()}
+        <Text style={{ textAlign: "center" }}>
+          {item.date.getDate()}/{item.date.getMonth()}
         </Text>
       </View>
     );
@@ -66,14 +93,12 @@ export default class StatsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Stats</Text>
+        <Text style={styles.h1}>Stats</Text>
         {this.state.entries && (
           <FlatList
-            renderItem={this.renderIcons}
-            data={this.state.entries.sort(
-              (a, b) => new Date(b.date) - new Date(a.date)
-            )}
-            style={{ marginBottom: 85 }}
+            renderItem={this.renderIcon}
+            data={this.state.entries}
+            style={{ marginHorizontal: 30 }}
             keyExtractor={(item) => item.date}
             horizontal={false}
             numColumns={7}
