@@ -48,7 +48,7 @@ export default function App() {
                   <Icon
                     name="pluscircle"
                     size={40}
-                    color="#000000AA"
+                    color="#F65058"
                     type="antdesign"
                   />
                 );
@@ -60,7 +60,7 @@ export default function App() {
                 );
               } else {
                 return (
-                  <Icon name="home" size={25} color="#000000AA" type="entypo" />
+                  <Icon name="home" size={25} color="#F65058" type="entypo" />
                 );
               }
             } else if (route.name === "Stats") {
@@ -78,7 +78,7 @@ export default function App() {
                   <Icon
                     name="text-document"
                     size={25}
-                    color="#000000AA"
+                    color="#F65058"
                     type="entypo"
                   />
                 );
@@ -89,7 +89,7 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: "#000000",
+          activeTintColor: "#F65058",
           inactiveTintColor: "gray",
           style: { height: 55 },
           labelStyle: {},

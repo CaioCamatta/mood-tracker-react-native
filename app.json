@@ -16,7 +16,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F65058"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -32,6 +32,12 @@
     "android": {
       "package": "com.CaioCoelho.moodJournal",
       "versionCode": 1
+    },
+    "androidStatusBar": {
+      "hidden": true
+    },
+    "androidNavigationBar":{
+      "visible": "sticky-immersive"
     }
   }
 }
