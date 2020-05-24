@@ -4,64 +4,15 @@ import Entry from "../components/Entry";
 import Constants from "expo-constants";
 import { AsyncStorage } from "react-native";
 
-const sample_entries = [
-  {
-    date: new Date("2020-07-25").toDateString(),
-    status: "Video Added",
-    mood: 4,
-  },
-  {
-    date: new Date("2020-07-24").toDateString(),
-    status: "Video Added",
-    mood: 1,
-  },
-  {
-    date: new Date("2020-07-23").toDateString(),
-    status: "Video Added",
-    mood: 2,
-  },
-  {
-    date: new Date("2020-07-22").toDateString(),
-    status: "Video Added",
-    mood: 3,
-  },
-  {
-    date: new Date("2020-07-21").toDateString(),
-    status: "Video Added",
-    mood: 4,
-  },
-  {
-    date: new Date("2020-07-20").toDateString(),
-    status: "Video Added",
-    mood: 2,
-  },
-  {
-    date: new Date("2020-07-19").toDateString(),
-    status: "Video Added",
-    mood: 1,
-  },
-  {
-    date: new Date("2020-07-18").toDateString(),
-    status: "Video Added",
-    mood: 2,
-  },
-  {
-    date: new Date("2020-07-17").toDateString(),
-    status: "Video Added",
-    mood: 3,
-  },
-];
-
 let real_entries = [];
 
 export default class HomeScreen extends React.Component {
   state = {
-    entries: sample_entries,
+    entries: [],
   };
 
   componentDidMount() {
     this._updater = this.props.navigation.addListener("focus", () => {
-      console.log("Update");
       this.retrieveData();
     });
   }
@@ -78,13 +29,12 @@ export default class HomeScreen extends React.Component {
       const keys = await AsyncStorage.getAllKeys();
       //await AsyncStorage.multiRemove(keys)
       const values = await AsyncStorage.multiGet(keys);
-      // console.log('data loaded:', values)
 
       // Map each obj to an entry
       values.map((arr) => this.databaseToEntry(...arr));
 
       // Display real list only if it has 1 object
-      values.length > 0 ? this.setState({ entries: real_entries }) : null;
+      this.setState({ entries: real_entries })
     } catch (error) {
       console.log("   fail:", error);
       // Error retrieving data
@@ -105,7 +55,7 @@ export default class HomeScreen extends React.Component {
             data={this.state.entries.sort(
               (a, b) => new Date(b.date) - new Date(a.date)
             )}
-            style={{ marginBottom: 85 }}
+            style={{ marginBottom: 60 }}
             keyExtractor={(item) => item.date.toString()}
           />
         </View>

@@ -38,17 +38,17 @@ export default function App() {
                 return (
                   <Icon
                     name="pluscircle"
-                    size={40}
-                    color="#000000"
+                    size={30}
+                    color="#F65058"
                     type="antdesign"
                   />
                 );
               } else {
                 return (
                   <Icon
-                    name="pluscircle"
-                    size={40}
-                    color="#F65058"
+                    name="pluscircleo"
+                    size={30}
+                    color="#000000BB"
                     type="antdesign"
                   />
                 );
@@ -56,11 +56,11 @@ export default function App() {
             } else if (route.name === "Home") {
               if ((iconName = focused)) {
                 return (
-                  <Icon name="home" size={25} color="#000000" type="entypo" />
+                  <Icon name="home" size={30} color="#F65058" type="entypo" />
                 );
               } else {
                 return (
-                  <Icon name="home" size={25} color="#F65058" type="entypo" />
+                  <Icon name="home" size={30} color="#000000BB" type="entypo" />
                 );
               }
             } else if (route.name === "Stats") {
@@ -68,8 +68,8 @@ export default function App() {
                 return (
                   <Icon
                     name="text-document"
-                    size={25}
-                    color="#000000"
+                    size={30}
+                    color="#F65058"
                     type="entypo"
                   />
                 );
@@ -77,8 +77,8 @@ export default function App() {
                 return (
                   <Icon
                     name="text-document"
-                    size={25}
-                    color="#F65058"
+                    size={30}
+                    color="#000000BB"
                     type="entypo"
                   />
                 );
@@ -95,16 +95,29 @@ export default function App() {
           labelStyle: {},
         }}
       >
-        <Tab.Screen name="Home" tabBarLabel="Home" component={HomeStackScreen} />
+        <Tab.Screen
+          name="Home"
+          tabBarLabel="Home"
+          component={HomeStackScreen}
+          options={{
+            tabBarLabel: () => null,
+          }}
+        />
         <Tab.Screen
           name="Adder"
           component={AddScreen}
           options={{
             tabBarLabel: () => null,
-            style: { padding: 50 },
           }}
         />
-        <Tab.Screen name="Stats" tabBarLabel="Stats" component={StatsScreen} />
+        <Tab.Screen
+          name="Stats"
+          tabBarLabel="Stats"
+          component={StatsScreen}
+          options={{
+            tabBarLabel: () => null,
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

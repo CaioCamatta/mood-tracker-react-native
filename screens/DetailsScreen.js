@@ -11,7 +11,7 @@ const decodedMoodEmoticons = [
   "sentiment-neutral",
   "sentiment-satisfied",
   "sentiment-very-satisfied",
-  "test",
+  "circle-outline",
 ];
 const decodedMoodPhrase = [
   "Depressed",
@@ -19,7 +19,15 @@ const decodedMoodPhrase = [
   "Mediocre",
   "Satisfied",
   "Delighted",
-  "test",
+  "-",
+];
+const decodedMoodColours = [
+  "#54539D",
+  "#7187D6",
+  "#a6808c",
+  "#ee964b",
+  "#F67251",
+  "#0000008A",
 ];
 const days = [
   "Sunday",
@@ -38,13 +46,11 @@ class DetailsScreen extends React.Component {
 
   retrieveData = async (date) => {
     try {
-      console.log(date);
       const values = await AsyncStorage.getItem(date);
       const obj = JSON.parse(values);
 
       // parse string to obj
       this.setState({ entryObj: { ...obj, date: date } });
-      console.log(values);
     } catch (error) {
       console.log("   fail:", error);
       // Error retrieving data
@@ -55,7 +61,6 @@ class DetailsScreen extends React.Component {
     // When mounted, get data based on date, and set a listener to update the date whenever the screen gets back into focus (i.e. returns from edit)
     this._updater = this.props.navigation.addListener("focus", () => {
       this.retrieveData(this.props.route.params.date);
-      console.log("Update");
     });
   }
 
@@ -101,11 +106,12 @@ class DetailsScreen extends React.Component {
           >
             <Icon
               name={decodedMoodEmoticons[entryObj.mood]}
-              color="#0000008A"
+              color={decodedMoodColours[entryObj.mood]}
               size={120}
+              type={entryObj.mood < 5 ? "ionicons" : "material-community"}
             />
             <View style={{ paddingHorizontal: 15 }}>
-              <Text style={[styles.h1, {}]}>
+              <Text style={[styles.h1, {color: decodedMoodColours[entryObj.mood]}]}>
                 {decodedMoodPhrase[entryObj.mood]}
               </Text>
               <Text style={[styles.text, { fontWeight: "700" }]}>
@@ -139,7 +145,7 @@ class DetailsScreen extends React.Component {
               type="clear"
               onPress={async () => {
                 await AsyncStorage.removeItem(entryObj.date);
-                this.props.navigation.navigate("Home");
+                this.props.navigation.goBack();
               }}
               buttonStyle={{paddingTop:10}}
             ></Button>

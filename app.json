@@ -33,9 +33,6 @@
       "package": "com.CaioCoelho.moodJournal",
       "versionCode": 1
     },
-    "androidStatusBar": {
-      "hidden": true
-    },
     "androidNavigationBar":{
       "visible": "sticky-immersive"
     }

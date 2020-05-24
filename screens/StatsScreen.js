@@ -12,6 +12,14 @@ const decodedMoodEmoticons = [
   "sentiment-very-satisfied",
   "circle-outline",
 ];
+const decodedMoodColours = [
+  "#54539D",
+  "#7187D6",
+  "#a6808c",
+  "#ee964b",
+  "#F67251",
+  "#0000008A",
+];
 var entries = [];
 
 export default class StatsScreen extends React.Component {
@@ -39,7 +47,6 @@ export default class StatsScreen extends React.Component {
 
   retrieveData = async () => {
     try {
-      entries = new Array();
       // Get all objects
       const keys = await AsyncStorage.getAllKeys();
       const values = await AsyncStorage.multiGet(keys);
@@ -48,12 +55,10 @@ export default class StatsScreen extends React.Component {
       values.map((arr) =>
         this.pushUnique({ date: new Date(arr[0]), ...JSON.parse(arr[1]) })
       );
-      console.log("   Success:", entries);
 
       // Display real list only if it has 1 object
       if (entries.length > 0) {
         entries.sort((a, b) => b.date - a.date);
-        console.log(entries);
 
         // Fill entries
         this.addEmptyEntries(entries[entries.length - 1].date, entries[0].date);
@@ -77,10 +82,10 @@ export default class StatsScreen extends React.Component {
 
   renderIcon = ({ item }) => {
     return (
-      <View style={{ paddingTop: 20, width: '14.285714285%' }}>
+      <View style={{ paddingTop: 20, width: "14.285714285%" }}>
         <Icon
           name={decodedMoodEmoticons[item.mood]}
-          color="#0000008A"
+          color={decodedMoodColours[item.mood]}
           size={40}
           type={item.mood < 5 ? "ionicons" : "material-community"}
         />
@@ -95,6 +100,9 @@ export default class StatsScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.h1}>Stats</Text>
+        {!this.state.entries && (
+          <Text style={{ paddingHorizontal: 20 }}>Nothing here yet.</Text>
+        )}
         {this.state.entries && (
           <FlatList
             renderItem={this.renderIcon}

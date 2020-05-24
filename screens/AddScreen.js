@@ -18,10 +18,10 @@ import { useNavigation } from "@react-navigation/native";
 const decodedMoodPhrase = [
   "Depressed",
   "Dissatisfied",
-  "Mediocre",
+  "Average",
   "Satisfied",
   "Delighted",
-  "Mood",
+  "-",
 ];
 const days = [
   "Sunday",
@@ -33,6 +33,14 @@ const days = [
   "Saturday",
 ];
 
+const decodedMoodColours = [
+  "#54539D",
+  "#7187D6",
+  "#a6808c",
+  "#ee964b",
+  "#F67251",
+  "#0000008A",
+];
 // TODO make this update better with parameters
 class AddScreen extends React.Component {
   constructor(props) {
@@ -52,7 +60,6 @@ class AddScreen extends React.Component {
     this._onPressListener = this.props.navigation.addListener(
       "tabPress",
       () => {
-        console.log("Tab pressed");
         this.setState({
           mood: 5,
           date: new Date(),
@@ -65,10 +72,8 @@ class AddScreen extends React.Component {
     );
 
     this._updater = this.props.navigation.addListener("focus", () => {
-      console.log("allowPopulating", this.state.allowPopulating); // If pre-populating data is passed
 
       if (this.props.route.params && this.state.allowPopulating) {
-        console.log("params:", this.props.route.params);
         this.setState({
           ...this.props.route.params,
           date: new Date(this.props.route.params.date),
@@ -77,14 +82,12 @@ class AddScreen extends React.Component {
     });
 
     this._resetter = this.props.navigation.addListener("blur", () => {
-      console.log("leaving"); // If pre-populating data is passed
       this.setState({ allowPopulating: true });
     });
   }
 
   // Delete listeners
   componentWillUnmount() {
-    console.log("unmount");
     this._onPressListener();
     this._updater();
   }
@@ -126,7 +129,6 @@ class AddScreen extends React.Component {
         this.state.date.toDateString(),
         JSON.stringify(entryObj)
       ).then(() => {
-        console.log("data saved");
         this.props.navigation.goBack();
       });
     } catch (error) {}
@@ -175,7 +177,7 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-very-dissatisfied"
-                color={this.state.mood === 0 ? "#000" : "#0000008A"}
+                color={this.state.mood === 0 ? decodedMoodColours[this.state.mood] : "#0000008A"}
                 size={50}
                 style={styles.emoji}
               />
@@ -185,7 +187,7 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-dissatisfied"
-                color={this.state.mood === 1 ? "#000" : "#0000008A"}
+                color={this.state.mood === 1 ? decodedMoodColours[this.state.mood] : "#0000008A"}
                 size={50}
                 style={styles.emoji}
               />
@@ -195,7 +197,7 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-neutral"
-                color={this.state.mood === 2 ? "#000" : "#0000008A"}
+                color={this.state.mood === 2 ? decodedMoodColours[this.state.mood] : "#0000008A"}
                 size={50}
                 style={styles.emoji}
               />
@@ -205,7 +207,7 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-satisfied"
-                color={this.state.mood === 3 ? "#000" : "#0000008A"}
+                color={this.state.mood === 3 ? decodedMoodColours[this.state.mood] : "#0000008A"}
                 size={50}
                 style={styles.emoji}
               />
@@ -215,17 +217,17 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-very-satisfied"
-                color={this.state.mood === 4 ? "#000" : "#0000008A"}
+                color={this.state.mood === 4 ? decodedMoodColours[this.state.mood] : "#0000008A"}
                 size={50}
                 style={styles.emoji}
               />
             </TouchableWithoutFeedback>
           </View>
-          <Text style={styles.h1}>{decodedMoodPhrase[this.state.mood]}</Text>
+          <Text style={[styles.h1, {color: decodedMoodColours[this.state.mood]}]}>{decodedMoodPhrase[this.state.mood]}</Text>
 
           <View>
             <Button
-              title={this.state.date.toLocaleDateString()}
+              title={"  " + this.state.date.toLocaleDateString() + " ▼"}
               onPress={this.showDatepicker}
               type="clear"
             ></Button>
