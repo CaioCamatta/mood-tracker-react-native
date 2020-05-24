@@ -69,40 +69,80 @@ class DetailsScreen extends React.Component {
       const entryObj = this.state.entryObj;
       return (
         <View style={styles.container}>
-          <Icon
-            name={decodedMoodEmoticons[entryObj.mood]}
-            color="#0000008A"
-            size={120}
-            style={{ paddingTop: 40 }}
-          />
-          <View style={{ paddingHorizontal: 15 }}>
-            <Text style={[styles.h1, {}]}>
-              {decodedMoodPhrase[entryObj.mood]}
-            </Text>
-            <Text style={[styles.text, { fontWeight: "700" }]}>
-              {entryObj.date.slice(4)}
-            </Text>
-            <Text style={[styles.text, {}]}>
-              {days[new Date(entryObj.date).getDay()]}
-            </Text>
-
-            {entryObj.videoJournal ? (
-              <Text style={[styles.journalText]}>{entryObj.videoJournal}</Text>
-            ) : entryObj.writtenJournal ? (
-              <Text style={[styles.journalText]}>
-                {entryObj.writtenJournal}
-              </Text>
-            ) : (
-              <Text style={[styles.journalText]}>Edit to Add Journal</Text>
-            )}
+          <View
+            style={{
+              alignItems: "flex-start",
+              paddingLeft: 10,
+              paddingTop: 10,
+            }}
+          >
+            <Button
+              onPress={() => this.props.navigation.goBack()}
+              color="#fff"
+              icon={
+                <Icon
+                  name="arrow-left"
+                  size={32}
+                  color="darkgray"
+                  type="feather"
+                />
+              }
+              style={{ position: "absolute", left: 0, flex: 1 }}
+              iconLeft
+              type="clear"
+            />
           </View>
-          <Button
-            title="Edit"
-            type="clear"
-            onPress={() =>
-              this.props.navigation.navigate("Adder", { ...entryObj })
-            }
-          ></Button>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#fff",
+              alignItems: "center",
+            }}
+          >
+            <Icon
+              name={decodedMoodEmoticons[entryObj.mood]}
+              color="#0000008A"
+              size={120}
+            />
+            <View style={{ paddingHorizontal: 15 }}>
+              <Text style={[styles.h1, {}]}>
+                {decodedMoodPhrase[entryObj.mood]}
+              </Text>
+              <Text style={[styles.text, { fontWeight: "700" }]}>
+                {entryObj.date.slice(4)}
+              </Text>
+              <Text style={[styles.text, {}]}>
+                {days[new Date(entryObj.date).getDay()]}
+              </Text>
+
+              {entryObj.videoJournal ? (
+                <Text style={[styles.journalText]}>
+                  {entryObj.videoJournal}
+                </Text>
+              ) : entryObj.writtenJournal ? (
+                <Text style={[styles.journalText]}>
+                  {entryObj.writtenJournal}
+                </Text>
+              ) : (
+                <Text style={[styles.journalText]}>Edit to Add Journal</Text>
+              )}
+            </View>
+            <Button
+              title="Edit"
+              type="clear"
+              onPress={() =>
+                this.props.navigation.navigate("Adder", { ...entryObj })
+              }
+            ></Button>
+            <Button
+              title="Delete"
+              type="clear"
+              onPress={async () => {
+                await AsyncStorage.removeItem(entryObj.date);
+                this.props.navigation.navigate("Home");
+              }}
+            ></Button>
+          </View>
         </View>
       );
     } else {
@@ -113,10 +153,9 @@ class DetailsScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: Constants.statusBarHeight,
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: Constants.statusBarHeight,
-    alignItems: "center",
   },
   h1: {
     fontSize: 30,
@@ -126,6 +165,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     fontFamily: "sans-serif-light",
     color: "#454545",
+    textAlign: "center",
   },
   text: {
     fontSize: 18,

@@ -39,6 +39,7 @@ export default class StatsScreen extends React.Component {
 
   retrieveData = async () => {
     try {
+      entries = new Array();
       // Get all objects
       const keys = await AsyncStorage.getAllKeys();
       const values = await AsyncStorage.multiGet(keys);
@@ -76,7 +77,7 @@ export default class StatsScreen extends React.Component {
 
   renderIcon = ({ item }) => {
     return (
-      <View style={{ paddingTop: 20, flex: 0.166666 }}>
+      <View style={{ paddingTop: 20, width: '14.285714285%' }}>
         <Icon
           name={decodedMoodEmoticons[item.mood]}
           color="#0000008A"
