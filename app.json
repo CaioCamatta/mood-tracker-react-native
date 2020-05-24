@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mood-tracker",
-    "slug": "mood-tracker",
+    "name": "Quick Journal",
+    "slug": "mood-journal",
     "platforms": [
       "ios",
       "android",
@@ -10,6 +10,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "notification": {
+      "icon": "./assets/notification-48px.png"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -22,7 +25,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.CaioCoelho.moodJournal",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.CaioCoelho.moodJournal",
+      "versionCode": 1
     }
   }
 }
