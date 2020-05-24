@@ -141,6 +141,7 @@ class DetailsScreen extends React.Component {
                 await AsyncStorage.removeItem(entryObj.date);
                 this.props.navigation.navigate("Home");
               }}
+              buttonStyle={{paddingTop:10}}
             ></Button>
           </View>
         </View>
