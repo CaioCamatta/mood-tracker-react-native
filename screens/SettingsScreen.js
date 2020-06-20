@@ -13,7 +13,6 @@ import FlashMessage from "react-native-flash-message";
 class SettingsScreen extends React.Component {
   state = {
     expoPushToken: "",
-    notification: {},
   };
 
   componentDidMount() {
@@ -32,7 +31,7 @@ class SettingsScreen extends React.Component {
     Vibration.vibrate();
     console.log("Received");
     console.log(notification);
-    this.setState({ notification: notification });
+    this.props.navigation.navigate("Adder")
   };
 
   registerForPushNotificationsAsync = async () => {
