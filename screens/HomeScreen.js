@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Entry from "../components/Entry";
 import Constants from "expo-constants";
+import { Icon, Button } from "react-native-elements";
 import { AsyncStorage } from "react-native";
 
 let real_entries = [];
@@ -34,7 +35,7 @@ export default class HomeScreen extends React.Component {
       values.map((arr) => this.databaseToEntry(...arr));
 
       // Display real list only if it has 1 object
-      this.setState({ entries: real_entries })
+      this.setState({ entries: real_entries });
     } catch (error) {
       console.log("   fail:", error);
       // Error retrieving data
@@ -48,7 +49,32 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.h1}>Entries</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={styles.h1}>Entries</Text>
+          <Button
+            onPress={() => this.props.navigation.navigate("Settings")}
+            color="#fff"
+            icon={
+              <Icon
+                name="settings"
+                size={24}
+                color="darkgray"
+                type="feather"
+                style={{
+                  padding: 20,
+                  paddingBottom: 10,
+                }}
+              />
+            }
+            iconLeft
+            type="clear"
+          />
+        </View>
         <View>
           <FlatList
             renderItem={this.renderEntries}

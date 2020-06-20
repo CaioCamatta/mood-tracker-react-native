@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, Settings } from "react-native";
 import { Icon } from "react-native-elements";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,6 +19,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="Details" component={DetailsScreen} />
+      <HomeStack.Screen name="Settings" component={SettingsScreen} />
     </HomeStack.Navigator>
   );
 }
