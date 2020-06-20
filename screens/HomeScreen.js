@@ -3,10 +3,7 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import Entry from "../components/Entry";
 import Constants from "expo-constants";
 import { Icon, Button } from "react-native-elements";
-import { AsyncStorage } from "react-native";
 import {connect} from 'react-redux'
-
-let real_entries = [];
 
 class HomeScreen extends React.Component {
   renderEntries = ({ item, navigation }) => (

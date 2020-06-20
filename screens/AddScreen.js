@@ -5,7 +5,6 @@ import {
   View,
   TouchableWithoutFeedback,
   Platform,
-  AsyncStorage,
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
@@ -13,7 +12,9 @@ import { Icon } from "react-native-elements";
 import Constants from "expo-constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Button } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
+
+import { addEntry } from "../redux/actions";
 
 const decodedMoodPhrase = [
   "Depressed",
@@ -68,18 +69,9 @@ class AddScreen extends React.Component {
           writtenJournal: "",
           allowPopulating: false,
         });
+        console.log("Tab pressed")
       }
     );
-
-    this._updater = this.props.navigation.addListener("focus", () => {
-
-      if (this.props.route.params && this.state.allowPopulating) {
-        this.setState({
-          ...this.props.route.params,
-          date: new Date(this.props.route.params.date),
-        });
-      }
-    });
 
     this._resetter = this.props.navigation.addListener("blur", () => {
       this.setState({ allowPopulating: true });
@@ -89,7 +81,6 @@ class AddScreen extends React.Component {
   // Delete listeners
   componentWillUnmount() {
     this._onPressListener();
-    this._updater();
   }
 
   handleTextChange = (writtenJournal) => {
@@ -110,28 +101,16 @@ class AddScreen extends React.Component {
     this.showMode("date");
   };
 
-  storeData = async () => {
-    try {
-      // Write object before storing
-      const entryObj = this.state.writtenJournal
-        ? {
-            mood: this.state.mood,
-            status: "Journal Added",
-            writtenJournal: this.state.writtenJournal,
-          }
-        : {
-            mood: this.state.mood,
-            status: "No Journal Added",
-            writtenJournal: "",
-          };
-
-      await AsyncStorage.setItem(
-        this.state.date.toDateString(),
-        JSON.stringify(entryObj)
-      ).then(() => {
-        this.props.navigation.goBack();
-      });
-    } catch (error) {}
+  storeEntry = () => {
+    entryObj = {
+      date: this.state.date.toDateString(),
+      mood: this.state.mood,
+      status: this.state.writtenJournal ? "Journal Added" : "No Journal Added",
+      writtenJournal: this.state.writtenJournal,
+    };
+    console.log("Adding");
+    this.props.addEntry(entryObj)
+    this.props.navigation.goBack();
   };
 
   render() {
@@ -177,7 +156,11 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-very-dissatisfied"
-                color={this.state.mood === 0 ? decodedMoodColours[this.state.mood] : "#0000008A"}
+                color={
+                  this.state.mood === 0
+                    ? decodedMoodColours[this.state.mood]
+                    : "#0000008A"
+                }
                 size={50}
                 style={styles.emoji}
               />
@@ -187,7 +170,11 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-dissatisfied"
-                color={this.state.mood === 1 ? decodedMoodColours[this.state.mood] : "#0000008A"}
+                color={
+                  this.state.mood === 1
+                    ? decodedMoodColours[this.state.mood]
+                    : "#0000008A"
+                }
                 size={50}
                 style={styles.emoji}
               />
@@ -197,7 +184,11 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-neutral"
-                color={this.state.mood === 2 ? decodedMoodColours[this.state.mood] : "#0000008A"}
+                color={
+                  this.state.mood === 2
+                    ? decodedMoodColours[this.state.mood]
+                    : "#0000008A"
+                }
                 size={50}
                 style={styles.emoji}
               />
@@ -207,7 +198,11 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-satisfied"
-                color={this.state.mood === 3 ? decodedMoodColours[this.state.mood] : "#0000008A"}
+                color={
+                  this.state.mood === 3
+                    ? decodedMoodColours[this.state.mood]
+                    : "#0000008A"
+                }
                 size={50}
                 style={styles.emoji}
               />
@@ -217,13 +212,21 @@ class AddScreen extends React.Component {
             >
               <Icon
                 name="sentiment-very-satisfied"
-                color={this.state.mood === 4 ? decodedMoodColours[this.state.mood] : "#0000008A"}
+                color={
+                  this.state.mood === 4
+                    ? decodedMoodColours[this.state.mood]
+                    : "#0000008A"
+                }
                 size={50}
                 style={styles.emoji}
               />
             </TouchableWithoutFeedback>
           </View>
-          <Text style={[styles.h1, {color: decodedMoodColours[this.state.mood]}]}>{decodedMoodPhrase[this.state.mood]}</Text>
+          <Text
+            style={[styles.h1, { color: decodedMoodColours[this.state.mood] }]}
+          >
+            {decodedMoodPhrase[this.state.mood]}
+          </Text>
 
           <View>
             <Button
@@ -252,7 +255,7 @@ class AddScreen extends React.Component {
             multiline
             editable
             onChangeText={(text) => this.handleTextChange(text)}
-            value={this.state.text}
+            value={this.state.writtenJournal}
             style={styles.input}
             placeholder="Write your journal here"
             numberOfLines={6}
@@ -261,7 +264,7 @@ class AddScreen extends React.Component {
 
           <Button
             title="Save"
-            onPress={this.storeData}
+            onPress={this.storeEntry}
             type="clear"
             style={{ marginTop: 100 }}
           ></Button>
@@ -293,4 +296,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddScreen;
+const mapStateToProps = (state) => ({
+  entries: state.entries,
+});
+
+export default connect(mapStateToProps, {addEntry: addEntry})(AddScreen);

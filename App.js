@@ -16,7 +16,6 @@ import { store, persistor } from "./redux/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-import { addEntry, updateEntry, removeEntry } from "./redux/actions";
 const HomeStack = createStackNavigator();
 
 function HomeStackScreen() {
@@ -33,21 +32,6 @@ const Tab = createBottomTabNavigator();
 
 export default class App extends React.Component {
   render() {
-    console.log("Adding");
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    store.dispatch(
-      addEntry({
-        date: tomorrow.toDateString(),
-        mood: 3,
-        status: "Journal Added again",
-        writtenJournal: "Test Journal",
-      })
-    );
-    store.dispatch(removeEntry(tomorrow.toDateString()))
-
-    console.log("app state:", store.getState());
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

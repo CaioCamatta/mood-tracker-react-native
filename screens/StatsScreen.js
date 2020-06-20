@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import { Icon } from "react-native-elements";
-import { AsyncStorage } from "react-native";
+import { connect } from "react-redux";
 
 const decodedMoodEmoticons = [
   "sentiment-very-dissatisfied",
@@ -20,64 +20,31 @@ const decodedMoodColours = [
   "#F67251",
   "#0000008A",
 ];
-var entries = [];
 
-export default class StatsScreen extends React.Component {
-  state = {
-    entries: null,
-  };
-
-  componentDidMount() {
-    this._updater = this.props.navigation.addListener("focus", () => {
-      this.retrieveData();
-    });
-  }
-
-  pushUnique = (obj) => {
-    if (entries) {
-      entries.findIndex(
-        (x) => x.date.toDateString() === obj.date.toDateString()
-      ) === -1
-        ? entries.push(obj)
-        : null;
-    } else {
-      entries.push(obj);
-    }
-  };
-
-  retrieveData = async () => {
-    try {
-      // Get all objects
-      const keys = await AsyncStorage.getAllKeys();
-      const values = await AsyncStorage.multiGet(keys);
-
-      // Map each obj to an entry
-      values.map((arr) =>
-        this.pushUnique({ date: new Date(arr[0]), ...JSON.parse(arr[1]) })
-      );
-
-      // Display real list only if it has 1 object
-      if (entries.length > 0) {
-        entries.sort((a, b) => b.date - a.date);
-
-        // Fill entries
-        this.addEmptyEntries(entries[entries.length - 1].date, entries[0].date);
-      }
-    } catch (error) {
-      console.log("   Fail:", error);
-    }
-  };
-
-  addEmptyEntries = (startDate, endDate) => {
+class StatsScreen extends React.Component {
+  addEmptyEntries = (entries) => {
+    startDate = entries[entries.length - 1].date;
+    endDate = entries[0].date;
     var start = new Date(startDate);
     const end = new Date(endDate);
+    console.log(entries);
+
+    // Create array of unique empty entries
+    emptyEntries = [];
     while (start <= end) {
       entryObj = { mood: 5, date: new Date(start) };
-      this.pushUnique(entryObj);
+      // Only add if entry is not already in the entries list
+      if (!entries.some((entry) => entry.date.toDateString() === entryObj.date.toDateString())) {
+        emptyEntries.push(entryObj);
+      }
       start.setDate(start.getDate() + 1);
     }
-    entries.sort((a, b) => b.date - a.date);
-    this.setState({ entries: entries });
+    console.log(emptyEntries);
+
+    // Add together empty and non-empty
+    allEntries = entries.concat(emptyEntries);
+    allEntries.sort((a, b) => b.date - a.date);
+    return allEntries;
   };
 
   renderIcon = ({ item }) => {
@@ -97,16 +64,21 @@ export default class StatsScreen extends React.Component {
   };
 
   render() {
+    entriesWithJSDates = this.props.entries.map((entry) => ({
+      ...entry,
+      date: new Date(entry.date),
+    }));
+    entries = this.addEmptyEntries(entriesWithJSDates);
     return (
       <View style={styles.container}>
         <Text style={styles.h1}>Stats</Text>
-        {!this.state.entries && (
+        {!entries && (
           <Text style={{ paddingHorizontal: 20 }}>Nothing here yet.</Text>
         )}
-        {this.state.entries && (
+        {entries && (
           <FlatList
             renderItem={this.renderIcon}
-            data={this.state.entries}
+            data={entries}
             style={{ marginHorizontal: 30 }}
             keyExtractor={(item) => item.date}
             horizontal={false}
@@ -130,3 +102,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 });
+
+const mapStateToProps = (state) => ({
+  entries: state.entries,
+});
+
+export default connect(mapStateToProps)(StatsScreen);
