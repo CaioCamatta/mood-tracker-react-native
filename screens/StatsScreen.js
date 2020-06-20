@@ -33,7 +33,11 @@ class StatsScreen extends React.Component {
     while (start <= end) {
       entryObj = { mood: 5, date: new Date(start) };
       // Only add if entry is not already in the entries list
-      if (!entries.some((entry) => entry.date.toDateString() === entryObj.date.toDateString())) {
+      if (
+        !entries.some(
+          (entry) => entry.date.toDateString() === entryObj.date.toDateString()
+        )
+      ) {
         emptyEntries.push(entryObj);
       }
       start.setDate(start.getDate() + 1);
@@ -66,7 +70,10 @@ class StatsScreen extends React.Component {
       ...entry,
       date: new Date(entry.date),
     }));
-    entries = this.addEmptyEntries(entriesWithJSDates);
+    console.log(entriesWithJSDates)
+    if (entriesWithJSDates.length > 0) {
+      var entries = this.addEmptyEntries(entriesWithJSDates);
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.h1}>Stats</Text>

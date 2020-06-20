@@ -267,7 +267,7 @@ class AddScreen extends React.Component {
             value={this.state.writtenJournal}
             style={styles.input}
             placeholder="Write your journal here"
-            numberOfLines={6}
+            numberOfLines={4}
             maxLength={400}
           ></TextInput>
 
@@ -297,8 +297,8 @@ const styles = StyleSheet.create({
   },
   emoji: {},
   input: {
-    paddingHorizontal: 30,
-    paddingVertical: 20,
+    marginHorizontal: 30,
+    marginVertical: 40,
     textAlign: "justify",
     fontFamily: "sans-serif-light",
     fontSize: 16,

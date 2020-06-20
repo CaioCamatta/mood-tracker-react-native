@@ -98,6 +98,7 @@ class SettingsScreen extends React.Component {
       message: "Notifications Scheduled!",
       type: "success",
     });
+    this.props.navigation.goBack()
   };
 
   cancelScheduledNotifications = async () => {
@@ -106,6 +107,7 @@ class SettingsScreen extends React.Component {
       message: "Notifications Cancelled",
       type: "info",
     });
+    this.props.navigation.goBack()
   };
 
   render() {
