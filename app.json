@@ -7,7 +7,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "notification": {
@@ -27,11 +27,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.CaioCoelho.moodJournal",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "package": "com.CaioCoelho.moodJournal",
-      "versionCode": 2
+      "versionCode": 3
     },
     "androidNavigationBar":{
       "visible": "sticky-immersive"

@@ -5,7 +5,7 @@ import { AsyncStorage } from "react-native";
 import reducer from "./reducer";
 
 const persistConfig = {
-  key: "test4",
+  key: "base",
   storage: AsyncStorage,
 };
 
