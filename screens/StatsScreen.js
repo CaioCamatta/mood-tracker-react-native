@@ -27,7 +27,6 @@ class StatsScreen extends React.Component {
     endDate = entries[0].date;
     var start = new Date(startDate);
     const end = new Date(endDate);
-    console.log(entries);
 
     // Create array of unique empty entries
     emptyEntries = [];
@@ -39,7 +38,6 @@ class StatsScreen extends React.Component {
       }
       start.setDate(start.getDate() + 1);
     }
-    console.log(emptyEntries);
 
     // Add together empty and non-empty
     allEntries = entries.concat(emptyEntries);

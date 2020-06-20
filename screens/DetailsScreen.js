@@ -45,7 +45,6 @@ class DetailsScreen extends React.Component {
   render() {
     // TODO: Subscribe only to changes in the relevant entry
     const entryObj = this.props.entries.filter((entry) => entry.date === this.props.route.params.date)[0]
-    console.log("entry: ", entryObj)
     if (entryObj) {
       return (
         <View style={styles.container}>

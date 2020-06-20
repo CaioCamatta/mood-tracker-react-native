@@ -69,9 +69,18 @@ class AddScreen extends React.Component {
           writtenJournal: "",
           allowPopulating: false,
         });
-        console.log("Tab pressed")
       }
     );
+
+    this._updater = this.props.navigation.addListener("focus", () => {
+
+      if (this.props.route.params && this.state.allowPopulating) {
+        this.setState({
+          ...this.props.route.params,
+          date: new Date(this.props.route.params.date),
+        });
+      }
+    });
 
     this._resetter = this.props.navigation.addListener("blur", () => {
       this.setState({ allowPopulating: true });
@@ -81,6 +90,7 @@ class AddScreen extends React.Component {
   // Delete listeners
   componentWillUnmount() {
     this._onPressListener();
+    this._updater();
   }
 
   handleTextChange = (writtenJournal) => {
@@ -108,7 +118,6 @@ class AddScreen extends React.Component {
       status: this.state.writtenJournal ? "Journal Added" : "No Journal Added",
       writtenJournal: this.state.writtenJournal,
     };
-    console.log("Adding");
     this.props.addEntry(entryObj)
     this.props.navigation.goBack();
   };
