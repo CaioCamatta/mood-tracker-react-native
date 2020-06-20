@@ -89,6 +89,7 @@ class SettingsScreen extends React.Component {
       repeat: "minute",
     };
 
+    await Notifications.cancelAllScheduledNotificationsAsync();
     await Notifications.scheduleLocalNotificationAsync(
       notificationObj,
       schedulingOptions
