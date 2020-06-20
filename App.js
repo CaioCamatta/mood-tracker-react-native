@@ -1,5 +1,4 @@
 import React from "react";
-import { Text, Settings } from "react-native";
 import { Icon } from "react-native-elements";
 
 import { NavigationContainer } from "@react-navigation/native";

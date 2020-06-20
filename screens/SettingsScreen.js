@@ -1,13 +1,12 @@
 import React from "react";
 import { Icon } from "react-native-elements";
 import { Button } from "react-native-elements";
-import { AsyncStorage } from "react-native";
 import { Text, View, Vibration, Platform, StyleSheet } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import moment from "moment";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 
 class SettingsScreen extends React.Component {
