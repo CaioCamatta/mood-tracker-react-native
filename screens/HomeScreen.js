@@ -3,45 +3,9 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import Entry from "../components/Entry";
 import Constants from "expo-constants";
 import { Icon, Button } from "react-native-elements";
-import { AsyncStorage } from "react-native";
+import {connect} from 'react-redux'
 
-let real_entries = [];
-
-export default class HomeScreen extends React.Component {
-  state = {
-    entries: [],
-  };
-
-  componentDidMount() {
-    this._updater = this.props.navigation.addListener("focus", () => {
-      this.retrieveData();
-    });
-  }
-
-  databaseToEntry = (date, obj) => {
-    const jsObj = JSON.parse(obj);
-    real_entries.push({ date, ...jsObj });
-  };
-
-  retrieveData = async () => {
-    try {
-      real_entries = [];
-      // Get all objects
-      const keys = await AsyncStorage.getAllKeys();
-      //await AsyncStorage.multiRemove(keys)
-      const values = await AsyncStorage.multiGet(keys);
-
-      // Map each obj to an entry
-      values.map((arr) => this.databaseToEntry(...arr));
-
-      // Display real list only if it has 1 object
-      this.setState({ entries: real_entries });
-    } catch (error) {
-      console.log("   fail:", error);
-      // Error retrieving data
-    }
-  };
-
+class HomeScreen extends React.Component {
   renderEntries = ({ item, navigation }) => (
     <Entry {...item} date={item.date} navigation={this.props.navigation} />
   );
@@ -78,9 +42,7 @@ export default class HomeScreen extends React.Component {
         <View>
           <FlatList
             renderItem={this.renderEntries}
-            data={this.state.entries.sort(
-              (a, b) => new Date(b.date) - new Date(a.date)
-            )}
+            data={this.props.entries}
             style={{ marginBottom: 60 }}
             keyExtractor={(item) => item.date.toString()}
           />
@@ -102,3 +64,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 });
+
+const mapStateToProps = state => ({
+  entries: state.entries,
+})
+
+export default connect(mapStateToProps)(HomeScreen)

@@ -4,6 +4,8 @@ import { Icon } from "react-native-elements";
 import Constants from "expo-constants";
 import { Button } from "react-native-elements";
 import { AsyncStorage } from "react-native";
+import {connect} from 'react-redux'
+import { removeEntry } from "../redux/actions";
 
 const decodedMoodEmoticons = [
   "sentiment-very-dissatisfied",
@@ -40,38 +42,10 @@ const days = [
 ];
 
 class DetailsScreen extends React.Component {
-  state = {
-    entryObj: null,
-  };
-
-  retrieveData = async (date) => {
-    try {
-      const values = await AsyncStorage.getItem(date);
-      const obj = JSON.parse(values);
-
-      // parse string to obj
-      this.setState({ entryObj: { ...obj, date: date } });
-    } catch (error) {
-      console.log("   fail:", error);
-      // Error retrieving data
-    }
-  };
-
-  componentDidMount() {
-    // When mounted, get data based on date, and set a listener to update the date whenever the screen gets back into focus (i.e. returns from edit)
-    this._updater = this.props.navigation.addListener("focus", () => {
-      this.retrieveData(this.props.route.params.date);
-    });
-  }
-
-  // Remove listeners
-  componentWillUnmount() {
-    this._updater();
-  }
-
   render() {
-    if (this.state.entryObj) {
-      const entryObj = this.state.entryObj;
+    // TODO: Subscribe only to changes in the relevant entry
+    const entryObj = this.props.entries.filter((entry) => entry.date === this.props.route.params.date)[0]
+    if (entryObj) {
       return (
         <View style={styles.container}>
           <View
@@ -143,8 +117,8 @@ class DetailsScreen extends React.Component {
             <Button
               title="Delete"
               type="clear"
-              onPress={async () => {
-                await AsyncStorage.removeItem(entryObj.date);
+              onPress={() => {
+                this.props.removeEntry(entryObj.date)
                 this.props.navigation.goBack();
               }}
               buttonStyle={{paddingTop:10}}
@@ -186,4 +160,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailsScreen;
+const mapStateToProps = state => ({
+  entries: state.entries
+})
+
+export default connect(mapStateToProps, {removeEntry: removeEntry})(DetailsScreen)

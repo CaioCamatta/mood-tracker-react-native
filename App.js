@@ -12,6 +12,10 @@ import AddScreen from "./screens/AddScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import StatsScreen from "./screens/StatsScreen";
 
+import { store, persistor } from "./redux/store";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+
 const HomeStack = createStackNavigator();
 
 function HomeStackScreen() {
@@ -26,100 +30,116 @@ function HomeStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <NavigationContainer>
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
 
-            if (route.name === "Adder") {
-              if ((iconName = focused)) {
-                return (
-                  <Icon
-                    name="pluscircle"
-                    size={30}
-                    color="#F65058"
-                    type="antdesign"
-                  />
-                );
-              } else {
-                return (
-                  <Icon
-                    name="pluscircleo"
-                    size={30}
-                    color="#000000BB"
-                    type="antdesign"
-                  />
-                );
-              }
-            } else if (route.name === "Home") {
-              if ((iconName = focused)) {
-                return (
-                  <Icon name="home" size={30} color="#F65058" type="entypo" />
-                );
-              } else {
-                return (
-                  <Icon name="home" size={30} color="#000000BB" type="entypo" />
-                );
-              }
-            } else if (route.name === "Stats") {
-              if ((iconName = focused)) {
-                return (
-                  <Icon
-                    name="text-document"
-                    size={30}
-                    color="#F65058"
-                    type="entypo"
-                  />
-                );
-              } else {
-                return (
-                  <Icon
-                    name="text-document"
-                    size={30}
-                    color="#000000BB"
-                    type="entypo"
-                  />
-                );
-              }
-            }
+                  if (route.name === "Adder") {
+                    if ((iconName = focused)) {
+                      return (
+                        <Icon
+                          name="pluscircle"
+                          size={30}
+                          color="#F65058"
+                          type="antdesign"
+                        />
+                      );
+                    } else {
+                      return (
+                        <Icon
+                          name="pluscircleo"
+                          size={30}
+                          color="#000000BB"
+                          type="antdesign"
+                        />
+                      );
+                    }
+                  } else if (route.name === "Home") {
+                    if ((iconName = focused)) {
+                      return (
+                        <Icon
+                          name="home"
+                          size={30}
+                          color="#F65058"
+                          type="entypo"
+                        />
+                      );
+                    } else {
+                      return (
+                        <Icon
+                          name="home"
+                          size={30}
+                          color="#000000BB"
+                          type="entypo"
+                        />
+                      );
+                    }
+                  } else if (route.name === "Stats") {
+                    if ((iconName = focused)) {
+                      return (
+                        <Icon
+                          name="text-document"
+                          size={30}
+                          color="#F65058"
+                          type="entypo"
+                        />
+                      );
+                    } else {
+                      return (
+                        <Icon
+                          name="text-document"
+                          size={30}
+                          color="#000000BB"
+                          type="entypo"
+                        />
+                      );
+                    }
+                  }
 
-            // You can return any component that you like here!
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: "#F65058",
-          inactiveTintColor: "gray",
-          style: { height: 55 },
-          labelStyle: {},
-        }}
-      >
-        <Tab.Screen
-          name="Home"
-          tabBarLabel="Home"
-          component={HomeStackScreen}
-          options={{
-            tabBarLabel: () => null,
-          }}
-        />
-        <Tab.Screen
-          name="Adder"
-          component={AddScreen}
-          options={{
-            tabBarLabel: () => null,
-          }}
-        />
-        <Tab.Screen
-          name="Stats"
-          tabBarLabel="Stats"
-          component={StatsScreen}
-          options={{
-            tabBarLabel: () => null,
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+                  // You can return any component that you like here!
+                },
+              })}
+              tabBarOptions={{
+                activeTintColor: "#F65058",
+                inactiveTintColor: "gray",
+                style: { height: 55 },
+                labelStyle: {},
+              }}
+            >
+              <Tab.Screen
+                name="Home"
+                tabBarLabel="Home"
+                component={HomeStackScreen}
+                options={{
+                  tabBarLabel: () => null,
+                }}
+              />
+              <Tab.Screen
+                name="Adder"
+                component={AddScreen}
+                options={{
+                  tabBarLabel: () => null,
+                }}
+              />
+              <Tab.Screen
+                name="Stats"
+                tabBarLabel="Stats"
+                component={StatsScreen}
+                options={{
+                  tabBarLabel: () => null,
+                }}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
+    );
+  }
 }
